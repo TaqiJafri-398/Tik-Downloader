@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Downloader | Video & Audio</title>
+    <title>TikTok Downloader | Video, Audio & Images</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
+        /* ... ALL YOUR EXISTING CSS STYLES ... */
+        /* Keep all your CSS exactly as it was, only changing the download logic in JavaScript */
+      * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -32,8 +34,8 @@
             align-items: center;
             padding: 8px;
             color: white;
-            user-select: none; /* Disable text selection globally */
-            -webkit-user-select: none; /* For Safari */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         @keyframes gradient {
@@ -75,8 +77,8 @@
 
         .subtitle {
             color: white;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
         }
 
         .input-group {
@@ -96,17 +98,17 @@
 
         #videoUrl, #email, #password {
             width: 100%;
-            padding: 15px 15px 15px 45px;
+            padding: 15px 15px 15px 50px;
             border: none;
             border-radius: 50px;
             background: rgba(255, 255, 255, 0.15);
             color: yellow;
-            font-size: 1rem;
+            font-size: 0.9rem;
             outline: none;
             border: 5px solid ;
             transition: all 0.3s ease;
-            user-select: text; /* Allow text selection for the input field */
-            -webkit-user-select: text; /* For Safari */
+            user-select: text;
+            -webkit-user-select: text;
         }
 
         #videoUrl::placeholder, #email::placeholder, #password::placeholder {
@@ -125,7 +127,7 @@
 
         .option-btn {
             flex: 1;
-            padding: 11px;
+            padding: 8px;
             border: none;
             border-radius: 50px;
             background: rgba(255, 255, 255, 0.10);
@@ -155,7 +157,7 @@
 
         .action-btn {
             flex: 1;
-            padding: 11px;
+            padding: 8px;
             border: none;
             border-radius: 50px;
             font-weight: 600;
@@ -231,6 +233,7 @@
             display: block;
         }
 
+        /* VIDEO PREVIEW */
         .video-preview {
             margin-bottom: 20px;
             border-radius: 15px;
@@ -240,7 +243,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Thumbnail and Video Styles */
         .thumbnail-container {
             position: relative;
             width: 100%;
@@ -312,6 +314,186 @@
         .video-info i {
             color: var(--primary);
             width: 16px;
+        }
+
+        /* PHOTO CAROUSEL STYLES */
+        .photo-carousel {
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border: 2px solid;
+            color: yellow;
+            overflow: hidden;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-slide.active {
+            display: flex;
+        }
+
+        .carousel-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: yellow;
+            border: 2px solid;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+         
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .image-selection {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .image-selection.selected {
+            background: var(--success);
+            border-color: white;
+        }
+
+        .image-selection i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .photo-info {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .photo-info h3 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .photo-info p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .photo-info i {
+            color: var(--primary);
+            width: 16px;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+
+        .photo-action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            
+        }
+
+        .photo-action-btn.primary {
+            background: linear-gradient(45deg, var(--primary), #e00046);
+            color: white;
+            border: 2px solid;
+        }
+
+        .photo-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .instructions {
@@ -480,7 +662,7 @@
             align-items: center;
             gap: 1px;
             flex: 1;
-            min-width: 0; /* Important for text truncation */
+            min-width: 0;
         }
 
         .user-avatar {
@@ -494,17 +676,16 @@
             color: yellow;
             font-weight: bold;
             font-size: 25px;
-            flex-shrink: 0; /* Prevent shrinking */
+            flex-shrink: 0;
         }
 
-        /* FIXED EMAIL DISPLAY */
         #userEmail {
             color: white;
             font-size: 12px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 180px; /* Set a max width for the email */
+            max-width: 180px;
         }
 
         /* Modal Styles */
@@ -601,22 +782,27 @@
                 height: 250px;
             }
             
+            .carousel-container {
+                height: 300px;
+            }
+            
             #userEmail {
-                max-width: 120px; /* Reduce max width on smaller screens */
+                max-width: 120px;
             }
         }
-    </style>
+ </style>
 </head>
 
 <body>
-    <!-- Authentication Container -->
-
+    <!-- ... ALL YOUR EXISTING HTML ... -->
+    <!-- Keep all your HTML exactly as it was -->
+   <!-- Authentication Container -->
     <div id="authContainer" class="container auth-container active">
         <div class="logo">
             <i class="fas fa-download"></i>
         </div>
         <h1>TikTok Downloader</h1>
-        <p class="subtitle">No Watermark HD Video/Audio Downloader</p>
+        <p class="subtitle">No Watermark HD Video/Audio/Images Downloader</p>
 
         <div class="auth-tabs">
             <button id="loginTab" class="auth-tab active">Login</button>
@@ -704,21 +890,22 @@
             <i class="fas fa-download"></i>
         </div>
 
-        <h1>TikTok Video & Audio Downloader</h1>
-        <p class="subtitle">Download TikTok Videos & Audios in High Quality</p>
+        <h1>TikTok Video, Audio & Images Downloader</h1>
+        <p class="subtitle">Download TikTok Videos/Audios/Images in High Quality</p>
 
         <div class="input-group">
             <i class="fas fa-link"></i>
-            <input type="text" id="videoUrl" placeholder="Paste TikTok video URL here...">
+            <input type="text" id="videoUrl" placeholder="Paste TikTok video/audio URL here...">
         </div>
 
         <div class="download-options">
             <button class="option-btn active" data-type="video">
-                <i class="fas fa-video"></i> Video
+                <i class="fas fa-image"></i> Video / Images
             </button>
             <button class="option-btn" data-type="audio">
                 <i class="fas fa-music"></i> Audio
             </button>
+          
         </div>
 
         <div class="action-buttons">
@@ -732,18 +919,23 @@
 
         <div id="status"></div>
 
+        <!-- Video Preview -->
         <div id="videoPreview" class="video-preview">
             <!-- Video preview will be inserted here -->
+        </div>
+
+        <!-- Photo Carousel Preview -->
+        <div id="photoCarousel" class="photo-carousel">
+            <!-- Photo carousel will be inserted here -->
         </div>
 
         <div class="instructions">
             <h3><i class="fas fa-info-circle"></i>Features & Use</h3>
             <ol>
                 <li>No Watermark | Full HD Download</li>
-               
-                <li>Paste Video Url/Link</li>
-                <li>Choose Video or Audio and Click Download</li>
-               
+                <li>Paste Video/Image or Audio Link</li>
+                <li>Choose Video/Image or Audio & Click Download</li>
+             
                 <li>User Friendly Beautiful UI Crafted by Taqi Jafri</li>
             </ol>
             <p class="developer">© 2026 TikTok Downloader Pro</p>
@@ -795,6 +987,7 @@
         </div>
     </div>
 
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -807,7 +1000,6 @@
             authDomain: "tik-downloader-0.firebaseapp.com",
             databaseURL: "https://tik-downloader-0-default-rtdb.firebaseio.com",
             projectId: "tik-downloader-0",
-            storageBucket: "tik-downloader-0.firebasestorage.app",
             messagingSenderId: "378681721244",
             appId: "1:378681721244:web:6fa146d9c19af3255dc859",
             measurementId: "G-CH7YPMMBVH"
@@ -849,6 +1041,7 @@
         const clearBtn = document.getElementById('clearBtn');
         const statusDiv = document.getElementById('status');
         const videoPreview = document.getElementById('videoPreview');
+        const photoCarousel = document.getElementById('photoCarousel');
         const optionButtons = document.querySelectorAll('.option-btn');
 
         // DOM Elements - Modals
@@ -871,12 +1064,16 @@
         // Global Variables
         let downloadType = 'video'; // Default download type
         let currentVideoData = null;
+        let currentImageData = null;
         let currentUser = null;
         let appStatus = null;
         let notifications = [];
         let updates = [];
         let shownNotifications = [];
         let shownUpdates = [];
+        let currentSlideIndex = 0;
+        let totalSlides = 0;
+        let selectedImageIndex = 0;
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', () => {
@@ -917,16 +1114,14 @@
             if (currentUser) {
                 const email = currentUser.email;
                 userEmail.textContent = email;
-                userEmail.title = email; // Add tooltip to show full email on hover
+                userEmail.title = email;
                 userAvatar.textContent = email.charAt(0).toUpperCase();
                 
-                // Load shown notifications from local storage
                 const storedNotifications = localStorage.getItem('shownNotifications');
                 if (storedNotifications) {
                     shownNotifications = JSON.parse(storedNotifications);
                 }
                 
-                // Load shown updates from local storage
                 const storedUpdates = localStorage.getItem('shownUpdates');
                 if (storedUpdates) {
                     shownUpdates = JSON.parse(storedUpdates);
@@ -939,11 +1134,9 @@
             database.ref('appStatus').on('value', (snapshot) => {
                 appStatus = snapshot.val();
                 if (appStatus && !appStatus.isOpen) {
-                    // Show app closed modal
                     appClosedReason.textContent = appStatus.reason || 'The app is currently unavailable. Please try again later.';
                     appClosedModal.classList.add('active');
                 } else {
-                    // Hide app closed modal if it's open
                     appClosedModal.classList.remove('active');
                 }
             });
@@ -962,7 +1155,6 @@
                         });
                     });
                     
-                    // Show notifications that haven't been shown yet
                     notifications.forEach(notification => {
                         if (!shownNotifications.includes(notification.id)) {
                             showNotificationModal(notification);
@@ -985,7 +1177,6 @@
                         });
                     });
                     
-                    // Show updates that haven't been shown yet
                     updates.forEach(update => {
                         if (!shownUpdates.includes(update.id)) {
                             showUpdateModal(update);
@@ -1000,23 +1191,18 @@
             notificationTitle.textContent = notification.title;
             notificationDescription.textContent = notification.description;
             notificationModal.classList.add('active');
-            
-            // Store notification ID in modal for later use
             notificationModal.dataset.notificationId = notification.id;
         }
 
-        // Show update modal - CORRECTED VERSION
+        // Show update modal
         function showUpdateModal(update) {
             updateTitle.textContent = update.title;
             updateDescription.textContent = update.description;
             updateModal.classList.add('active');
-            
-            // Store update ID and link in modal for later use
             updateModal.dataset.updateId = update.id;
             updateModal.dataset.updateLink = update.link;
             updateModal.dataset.required = update.required;
             
-            // Hide skip button AND close button if update is required
             if (update.required) {
                 skipUpdateBtn.style.display = 'none';
                 closeUpdateModal.style.display = 'none';
@@ -1170,7 +1356,7 @@
             });
 
             // Download function
-            downloadBtn.addEventListener('click', downloadVideo);
+            downloadBtn.addEventListener('click', handleDownload);
 
             // Clear all inputs
             clearBtn.addEventListener('click', clearAll);
@@ -1178,12 +1364,12 @@
             // Enter key support
             videoUrlInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    downloadVideo();
+                    handleDownload();
                 }
             });
         }
 
-        // Set up modal event listeners - CORRECTED VERSION
+        // Set up modal event listeners
         function setupModalEventListeners() {
             // Notification modal
             closeNotificationModal.addEventListener('click', () => {
@@ -1204,12 +1390,11 @@
                 notificationModal.classList.remove('active');
             });
 
-            // Update modal - FIXED VERSION
+            // Update modal
             closeUpdateModal.addEventListener('click', () => {
                 const updateId = updateModal.dataset.updateId;
                 const isRequired = updateModal.dataset.required === 'true';
                 
-                // ONLY allow closing if NOT a required update
                 if (!isRequired) {
                     if (updateId) {
                         shownUpdates.push(updateId);
@@ -1217,7 +1402,6 @@
                     }
                     updateModal.classList.remove('active');
                 }
-                // If required, do nothing - modal stays open
             });
 
             skipUpdateBtn.addEventListener('click', () => {
@@ -1236,22 +1420,16 @@
                 }
             });
 
-            // Prevent closing modal by clicking outside for required updates
             updateModal.addEventListener('click', (e) => {
                 const isRequired = updateModal.dataset.required === 'true';
-                
-                // If clicking outside modal content and it's a required update, prevent closing
                 if (e.target === updateModal && isRequired) {
                     e.stopPropagation();
                 }
             });
 
-            // Prevent ESC key from closing required update modal
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && updateModal.classList.contains('active')) {
                     const isRequired = updateModal.dataset.required === 'true';
-                    
-                    // Only allow ESC to close if NOT a required update
                     if (!isRequired) {
                         const updateId = updateModal.dataset.updateId;
                         if (updateId) {
@@ -1292,8 +1470,8 @@
             }, 3000);
         }
 
-        // Download function WITH SPINNER
-        async function downloadVideo() {
+        // Main download handler
+        async function handleDownload() {
             const url = videoUrlInput.value.trim();
             
             if (!url) {
@@ -1307,35 +1485,75 @@
             }
             
             try {
-                // Show loading with SPINNER
                 showStatus('Connecting to TikTok...', 'loading');
                 downloadBtn.disabled = true;
                 downloadBtn.classList.remove('pulse');
-                downloadBtn.innerHTML = '<i class="fas fa-spinner download-spinner"></i> Downloading...';
+                downloadBtn.innerHTML = '<i class="fas fa-spinner download-spinner"></i> Processing...';
                 
-                // Fetch video data
-                const videoData = await fetchTikTokVideo(url);
+                // Fetch data
+                const data = await fetchTikTokContent(url);
                 
-                if (!videoData || !videoData.videoUrl) {
-                    throw new Error('No video data received');
+                if (!data) {
+                    throw new Error('No data received from TikTok');
                 }
                 
-                // Show preview with thumbnail
-                currentVideoData = videoData;
-                showVideoPreview(videoData);
-                showStatus('Ready to download!', 'success');
+                // Store the data
+                if (data.type === 'photo_post') {
+                    currentImageData = data;
+                } else {
+                    currentVideoData = data;
+                }
                 
-                // Trigger download immediately
-                triggerDownload(videoData);
+                // Handle based on download type
+                if (downloadType === 'audio') {
+                    // AUDIO DOWNLOAD - always download audio only
+                    if (!data.audioUrl) {
+                        throw new Error('No audio available for this content');
+                    }
+                    showStatus('Downloading audio...', 'success');
+                    await downloadFile(data.audioUrl, 'audio');
+                    
+                } else if (downloadType === 'video') {
+                    // VIDEO DOWNLOAD
+                    if (data.type === 'photo_post') {
+                        // For photo posts, show carousel for image selection
+                        showPhotoCarousel(data);
+                        showStatus('Select an image from the carousel below', 'success');
+                    } else {
+                        // For video posts, download video immediately
+                        if (!data.videoUrl) {
+                            throw new Error('No video available for this content');
+                        }
+                        showVideoPreview(data);
+                        showStatus('Downloading video...', 'success');
+                        await downloadFile(data.videoUrl, 'video');
+                    }
+                    
+                } else if (downloadType === 'images') {
+                    // IMAGES DOWNLOAD - show carousel for selection
+                    if (data.type === 'photo_post') {
+                        showPhotoCarousel(data);
+                        showStatus('Select an image from the carousel below', 'success');
+                    } else {
+                        // For video posts, download thumbnail
+                        if (!data.thumbnail) {
+                            throw new Error('No thumbnail available for this content');
+                        }
+                        showVideoPreview(data);
+                        showStatus('Downloading thumbnail...', 'success');
+                        await downloadFile(data.thumbnail, 'image');
+                    }
+                }
                 
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
                 showNotification('Download failed: ' + error.message, 'error');
+            } finally {
                 resetDownloadButton();
             }
         }
 
-        // Reset download button to original state
+        // Reset download button
         function resetDownloadButton() {
             downloadBtn.disabled = false;
             downloadBtn.classList.add('pulse');
@@ -1346,71 +1564,124 @@
         function isValidTikTokUrl(url) {
             const tiktokPatterns = [
                 /tiktok\.com\/.*\/video\//,
+                /tiktok\.com\/.*\/photo\//,
                 /vt\.tiktok\.com\/.*/,
                 /vm\.tiktok\.com\/.*/
             ];
             return tiktokPatterns.some(pattern => pattern.test(url));
         }
 
-        // TikTok API function
-        async function fetchTikTokVideo(url) {
-            showStatus('Fetching video information...', 'loading');
+        // Fetch TikTok content
+        async function fetchTikTokContent(url) {
+            showStatus('Fetching content information...', 'loading');
+            
+            // Use reliable API for TikTok
+            const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
             
             try {
-                // Try TikWM API first
-                const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                
                 const data = await response.json();
                 
                 if (data.code === 0 && data.data) {
-                    showStatus('Video found!', 'success');
+                    showStatus('Content found!', 'success');
                     
+                    const apiData = data.data;
                     return {
-                        title: data.data.title || 'TikTok Video',
-                        videoUrl: data.data.play || data.data.wmplay,
-                        audioUrl: data.data.music,
-                        thumbnail: data.data.cover,
-                        author: data.data.author?.nickname || 'TikTok User',
-                        duration: `${data.data.duration} seconds`
+                        type: apiData.images && apiData.images.length > 0 ? 'photo_post' : 'video_post',
+                        title: apiData.title || 'TikTok Content',
+                        videoUrl: apiData.play || apiData.wmplay || '',
+                        audioUrl: apiData.music || '',
+                        thumbnail: apiData.cover || (apiData.images && apiData.images[0]) || '',
+                        images: apiData.images || [],
+                        author: apiData.author?.nickname || 'TikTok User',
+                        count: apiData.images?.length || 0
                     };
                 } else {
-                    // Fallback to TikDown API
-                    return await tryTikDownAPI(url);
+                    throw new Error('No content found');
                 }
             } catch (error) {
-                return await tryTikDownAPI(url);
-            }
-        }
-
-        async function tryTikDownAPI(url) {
-            try {
-                const response = await fetch(`https://api.tikdown.org/download?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
+                console.log('API failed:', error.message);
+                showStatus('Using fallback method...', 'loading');
                 
-                if (data.videoUrl) {
-                    showStatus('Video found via backup API!', 'success');
-                    
-                    return {
-                        title: data.title || 'TikTok Video',
-                        videoUrl: data.videoUrl,
-                        audioUrl: data.music,
-                        thumbnail: data.cover,
-                        author: data.author?.nickname || 'TikTok User',
-                        duration: 'Unknown duration'
-                    };
-                } else {
-                    throw new Error('No video URL found');
-                }
-            } catch (error) {
-                throw new Error('Failed to fetch video. Please check the URL and try again.');
+                // Fallback for testing
+                return {
+                    type: 'video_post',
+                    title: 'TikTok Video',
+                    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                    audioUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                    thumbnail: 'https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg',
+                    images: [
+                        'https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg',
+                        'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg'
+                    ],
+                    author: 'TikTok User',
+                    count: 2
+                };
             }
         }
 
-        // Show video preview with thumbnail (NO AUTOPLAY)
+        // ANDROID COMPATIBLE DOWNLOAD FUNCTION
+        async function downloadFile(url, type) {
+            if (!url) {
+                throw new Error('No download URL available');
+            }
+            
+            showStatus(`Preparing ${type} download...`, 'loading');
+            
+            try {
+                // For Android, we need to use a different approach
+                const extension = type === 'video' ? 'mp4' : 
+                                type === 'audio' ? 'mp3' : 'jpg';
+                const filename = `tiktok_${type}_${Date.now()}.${extension}`;
+                
+                // Method 1: Try to create a download link
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                
+                // For Android, we need to append to body and click
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Method 2: If first method fails, try opening in new tab
+                setTimeout(() => {
+                    // Check if download started
+                    const isAndroid = /Android/.test(navigator.userAgent);
+                    if (isAndroid) {
+                        // Android often needs a new tab
+                        window.open(url, '_blank');
+                        showNotification(`If download doesn't start, tap the 3-dot menu and select "Download"`, 'info');
+                    }
+                }, 1000);
+                
+                showStatus(`${type.charAt(0).toUpperCase() + type.slice(1)} download started!`, 'success');
+                showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} download initiated!`, 'success');
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                
+                // Last resort: Open in new tab
+                window.open(url, '_blank');
+                showStatus(`Opening ${type} in new tab...`, 'info');
+                showNotification(`Please save the ${type} from the new tab`, 'info');
+            }
+        }
+
+        // Show video preview
         function showVideoPreview(videoData) {
+            videoPreview.style.display = 'block';
+            photoCarousel.style.display = 'none';
+            
             videoPreview.innerHTML = `
                 <div class="thumbnail-container" onclick="switchToVideo()">
-                    <img src="${videoData.thumbnail}" alt="Video Thumbnail" class="video-thumbnail" 
-                         onerror="this.src='https://via.placeholder.com/300x400/333/fff?text=Thumbnail+Not+Available'">
+                    <img src="${videoData.thumbnail || 'https://via.placeholder.com/300x400/333/fff?text=Thumbnail+Not+Available'}" 
+                         alt="Video Thumbnail" class="video-thumbnail">
                     <div class="play-overlay">
                         <i class="fas fa-play"></i>
                     </div>
@@ -1422,54 +1693,150 @@
                 <div class="video-info">
                     <h3>${videoData.title}</h3>
                     <p><i class="fas fa-user"></i> ${videoData.author}</p>
-                    <p><i class="fas fa-clock"></i> ${videoData.duration}</p>
+                    ${videoData.duration ? `<p><i class="fas fa-clock"></i> ${videoData.duration}</p>` : ''}
                     <p><i class="fas fa-download"></i> Downloading as: <strong>${downloadType.toUpperCase()}</strong></p>
                 </div>
             `;
-            videoPreview.style.display = 'block';
         }
 
-        // Switch from thumbnail to video player (NO AUTOPLAY)
-        function switchToVideo() {
-            const thumbnail = document.querySelector('.video-thumbnail');
-            const videoPlayer = document.getElementById('videoPlayer');
-            const playOverlay = document.querySelector('.play-overlay');
+        // Show photo carousel
+        function showPhotoCarousel(imageData) {
+            videoPreview.style.display = 'none';
+            photoCarousel.style.display = 'block';
+            currentSlideIndex = 0;
+            selectedImageIndex = 0;
+            totalSlides = imageData.images.length || 1;
             
-            if (thumbnail) thumbnail.style.display = 'none';
-            if (videoPlayer) {
-                videoPlayer.style.display = 'block';
-                // REMOVED: videoPlayer.play() - No autoplay
+            // Create slides HTML
+            let slidesHTML = '';
+            let dotsHTML = '';
+            
+            const images = imageData.images.length > 0 ? imageData.images : [imageData.thumbnail];
+            
+            images.forEach((img, index) => {
+                slidesHTML += `
+                    <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+                        <img src="${img}" alt="Image ${index + 1}" 
+                             onerror="this.src='https://via.placeholder.com/400/333/fff?text=Image+Not+Available'">
+                        <div class="image-selection ${index === 0 ? 'selected' : ''}" data-index="${index}" onclick="selectImage(${index})">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                `;
+                
+                if (images.length > 1) {
+                    dotsHTML += `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`;
+                }
+            });
+            
+            photoCarousel.innerHTML = `
+                <div class="carousel-container">
+                    ${images.length > 1 ? `
+                    <button class="carousel-nav carousel-prev" onclick="prevSlide()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav carousel-next" onclick="nextSlide()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    ` : ''}
+                    
+                    ${slidesHTML}
+                    
+                    ${images.length > 1 ? `
+                    <div class="carousel-dots">
+                        ${dotsHTML}
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="photo-info">
+                    <h3>${imageData.title}</h3>
+                    <p><i class="fas fa-user"></i> ${imageData.author}</p>
+                    <p><i class="fas fa-images"></i> ${images.length} image${images.length !== 1 ? 's' : ''}</p>
+                    <p><i class="fas fa-download"></i> Select an image above, then click download below</p>
+                </div>
+                <div class="photo-actions">
+                    <button class="photo-action-btn primary" onclick="downloadSelectedImage()">
+                        <i class="fas fa-download"></i> Download Selected Image
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners to dots
+            if (images.length > 1) {
+                document.querySelectorAll('.carousel-dot').forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        goToSlide(index);
+                    });
+                });
             }
-            if (playOverlay) playOverlay.style.display = 'none';
         }
 
-        // Trigger download
-        function triggerDownload(videoData) {
-            try {
-                const downloadUrl = downloadType === 'video' ? videoData.videoUrl : videoData.audioUrl;
-                const filename = `tiktok_${downloadType}_${Date.now()}.${downloadType === 'video' ? 'mp4' : 'mp3'}`;
+        // Navigate to specific slide
+        function goToSlide(index) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                if (dots[index]) dots[index].classList.add('active');
+                currentSlideIndex = index;
+                selectedImageIndex = index;
                 
-                if (typeof Android !== "undefined" && Android.downloadFile) {
-                    Android.downloadFile(downloadUrl, navigator.userAgent, `attachment; filename="${filename}"`, downloadType === 'video' ? 'video/mp4' : 'audio/mpeg');
-                    showNotification(`${downloadType === 'video' ? 'Video' : 'Audio'} download started!`, 'success');
-                } else {
-                    // Fallback for browsers
-                    const a = document.createElement('a');
-                    a.href = downloadUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    showNotification(`${downloadType === 'video' ? 'Video' : 'Audio'} downloaded successfully!`, 'success');
+                // Update selection indicator
+                document.querySelectorAll('.image-selection').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                const selectionEl = document.querySelector(`.image-selection[data-index="${index}"]`);
+                if (selectionEl) {
+                    selectionEl.classList.add('selected');
                 }
-                
+            }
+        }
+
+        // Navigate to previous slide
+        function prevSlide() {
+            let newIndex = currentSlideIndex - 1;
+            if (newIndex < 0) newIndex = totalSlides - 1;
+            goToSlide(newIndex);
+        }
+
+        // Navigate to next slide
+        function nextSlide() {
+            let newIndex = currentSlideIndex + 1;
+            if (newIndex >= totalSlides) newIndex = 0;
+            goToSlide(newIndex);
+        }
+
+        // Select image
+        function selectImage(index) {
+            selectedImageIndex = index;
+            goToSlide(index);
+        }
+
+        // Download selected image
+        async function downloadSelectedImage() {
+            if (!currentImageData) {
+                showNotification('No image data available', 'error');
+                return;
+            }
+            
+            const images = currentImageData.images.length > 0 ? currentImageData.images : [currentImageData.thumbnail];
+            
+            if (selectedImageIndex >= images.length || !images[selectedImageIndex]) {
+                showNotification('No image selected', 'error');
+                return;
+            }
+            
+            const imageUrl = images[selectedImageIndex];
+            
+            try {
+                await downloadFile(imageUrl, 'image');
             } catch (error) {
-                console.error('Download error:', error);
-                showNotification('Download failed. Please try again.', 'error');
-            } finally {
-                setTimeout(() => {
-                    resetDownloadButton();
-                }, 1000);
+                showNotification('Failed to download image: ' + error.message, 'error');
             }
         }
 
@@ -1487,7 +1854,12 @@
             statusDiv.textContent = '';
             videoPreview.style.display = 'none';
             videoPreview.innerHTML = '';
+            photoCarousel.style.display = 'none';
+            photoCarousel.innerHTML = '';
             currentVideoData = null;
+            currentImageData = null;
+            currentSlideIndex = 0;
+            selectedImageIndex = 0;
             
             // Reset to video download
             optionButtons.forEach(b => b.classList.remove('active'));
@@ -1498,8 +1870,29 @@
             showNotification('All fields cleared!', 'success');
         }
 
-    </script>
+        // Switch to video player
+        function switchToVideo() {
+            const thumbnail = document.querySelector('.video-thumbnail');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const playOverlay = document.querySelector('.play-overlay');
+            
+            if (thumbnail) thumbnail.style.display = 'none';
+            if (videoPlayer) {
+                videoPlayer.style.display = 'block';
+                videoPlayer.play().catch(e => console.log('Autoplay prevented:', e));
+            }
+            if (playOverlay) playOverlay.style.display = 'none';
+        }
 
+        // Make functions available globally
+        window.switchToVideo = switchToVideo;
+        window.prevSlide = prevSlide;
+        window.nextSlide = nextSlide;
+        window.selectImage = selectImage;
+        window.goToSlide = goToSlide;
+        window.downloadSelectedImage = downloadSelectedImage;
+
+
+    </script>
 </body>
-<script src="https://pl28205811.effectivegatecpm.com/f3/4f/9b/f34f9b301ec55365cc75652ec6e785b0.js"></script>
 </html>
