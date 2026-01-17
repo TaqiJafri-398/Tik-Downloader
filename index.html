@@ -176,7 +176,7 @@
         .action-btn {
             flex: 1;
             padding: 8px;
-            border: none;
+            border: 2px solid black ;
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -200,7 +200,7 @@
         #clearBtn, #backBtn {
             background: rgba(255, 255, 255, 0.15);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             border-color: yellow;
             font-size: 0.8rem
         }
@@ -821,11 +821,10 @@
         /* New styles for media download buttons */
         .media-download-btn {
             margin-top: 10px;
-            margin-left: 65px;
             padding: 10px 15px;
             background: linear-gradient(45deg, var(--primary), #e00046);
             color: white;
-            border: none;
+            border: 2px solid yellow;
             border-radius: 50px;
             font-weight: 600;
             display: flex;
@@ -1040,7 +1039,7 @@
 
         <div class="action-buttons">
             <button id="downloadBtn" class="action-btn pulse">
-                <i class="fas fa-download"></i>Fetch Content
+                <i class="fas fa-download"></i>HD Download
             </button>
             <button id="clearBtn" class="action-btn">
                 <i class="fas fa-broom"></i> Clear
@@ -1118,12 +1117,12 @@
     </div>
 
 
-    <!-- Firebase SDK -->
+      <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    
-    <script>
+
+<script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDEi25mmRbtZn8Mb9MKX-pWZ6r_c-GFgWU",
@@ -1720,7 +1719,7 @@
         function resetDownloadButton() {
             downloadBtn.disabled = false;
             downloadBtn.classList.add('pulse');
-            downloadBtn.innerHTML = '<i class="fas fa-download"></i>Fetch Content';
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i>HD Download';
         }
 
         // Validate TikTok URL
@@ -1755,7 +1754,7 @@
                     
                     const apiData = data.data;
                     return {
-                        type: apiData.images && apiData.images.length > 0 ? 'photo_post' : 'video_post',
+                        type: apiData.images && apiData.images.length > 0 ? 'photo_post' : 'video_post' ,
                         title: apiData.title || 'TikTok Content',
                         videoUrl: apiData.play || apiData.wmplay || '',
                         audioUrl: apiData.music || '',
@@ -1788,8 +1787,8 @@
             }
         }
 
-        // RESTORED ORIGINAL DOWNLOAD FUNCTION
-        async function downloadFile(url, type) {
+        // WORKING DOWNLOAD FUNCTION - Extracted from your old code
+        function downloadFile(url, type) {
             if (!url) {
                 throw new Error('No download URL available');
             }
@@ -1797,55 +1796,33 @@
             showStatus(`Preparing ${type} download...`, 'loading');
             
             try {
-                // For Android, we need to use a different approach
-                const extension = type === 'video' ? 'mp4' : 
-                                type === 'audio' ? 'mp3' : 'jpg';
-                const filename = `tiktok_${type}_${Date.now()}.${extension}`;
+                const filename = `tiktok_${type}_${Date.now()}.${type === 'video' ? 'mp4' : type === 'audio' ? 'mp3' : 'jpg'}`;
                 
-                // Method 1: Try to create a download link
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                a.setAttribute('target', '_self'); // Ensure it doesn't open in new tab
-                
-                // For Android, we need to append to body and click
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                // Method 2: Use fetch and blob for better control
-                try {
-                    const response = await fetch(url);
-                    const blob = await response.blob();
-                    const blobUrl = URL.createObjectURL(blob);
+                // Check if running in Android WebView with custom interface
+                if (typeof Android !== "undefined" && Android.downloadFile) {
+                    // Use Android WebView download method
+                    Android.downloadFile(url, navigator.userAgent, `attachment; filename="${filename}"`, 
+                        type === 'video' ? 'video/mp4' : type === 'audio' ? 'audio/mpeg' : 'image/jpeg');
+                    showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} download started!`, 'success');
+                } else {
+                    // Fallback for browsers - create a download link
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.setAttribute('target', '_self'); // Ensure it doesn't open in new tab
                     
-                    const blobLink = document.createElement('a');
-                    blobLink.href = blobUrl;
-                    blobLink.download = filename;
-                    blobLink.setAttribute('target', '_self'); // Ensure it doesn't open in new tab
+                    // Append to body and click
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
                     
-                    document.body.appendChild(blobLink);
-                    blobLink.click();
-                    document.body.removeChild(blobLink);
-                    
-                    // Clean up
-                    setTimeout(() => {
-                        URL.revokeObjectURL(blobUrl);
-                    }, 100);
-                    
-                } catch (blobError) {
-                    console.log('Blob method failed:', blobError);
-                    // Fallback to direct download
-                    showStatus(`Downloading ${type}...`, 'success');
+                    showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} download started!`, 'success');
                 }
                 
                 showStatus(`${type.charAt(0).toUpperCase() + type.slice(1)} download started!`, 'success');
-                showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} download initiated!`, 'success');
                 
             } catch (error) {
                 console.error('Download error:', error);
-                
-                // Last resort: Show error instead of opening in new tab
                 showStatus(`Download failed: ${error.message}`, 'error');
                 showNotification(`Download failed. Please try again.`, 'error');
             }
@@ -1891,7 +1868,7 @@
                 <div class="audio-preview">
                     <img src="${audioData.thumbnail || 'https://via.placeholder.com/120x120/333/fff?text=Audio'}" 
                          alt="Audio Thumbnail" class="audio-thumbnail">
-                    <div class="audio-title">${audioData.title}</div>
+                 
                     <audio id="audioPlayer" controls class="audio-player">
                         <source src="${audioData.audioUrl}" type="audio/mpeg">
                         Your browser does not support the audio element.
@@ -1905,7 +1882,7 @@
                 </div>
                 <div style="padding: 0 20px 20px;">
                     <button class="media-download-btn" onclick="downloadCurrentMedia('audio')">
-                        <i class="fas fa-download"></i> Download Audio
+                        <i class="fas fa-download"></i>Click 3 dots to Download
                     </button>
                 </div>
             `;
@@ -2030,7 +2007,7 @@
         }
 
         // Download selected image
-        async function downloadSelectedImage() {
+        function downloadSelectedImage() {
             if (!currentImageData) {
                 showNotification('No image data available', 'error');
                 return;
@@ -2046,28 +2023,28 @@
             const imageUrl = images[selectedImageIndex];
             
             try {
-                await downloadFile(imageUrl, 'image');
+                downloadFile(imageUrl, 'image');
             } catch (error) {
                 showNotification('Failed to download image: ' + error.message, 'error');
             }
         }
 
         // Download current media (video or audio)
-        async function downloadCurrentMedia(type) {
+        function downloadCurrentMedia(type) {
             if (type === 'video' && currentVideoData) {
                 try {
-                    await downloadFile(currentVideoData.videoUrl, 'video');
+                    downloadFile(currentVideoData.videoUrl, 'video');
                 } catch (error) {
                     showNotification('Failed to download video: ' + error.message, 'error');
                 }
             } else if (type === 'audio' && currentVideoData) {
                 try {
-                    await downloadFile(currentVideoData.audioUrl, 'audio');
+                    downloadFile(currentVideoData.audioUrl, 'audio');
                 } catch (error) {
                     showNotification('Failed to download audio: ' + error.message, 'error');
                 }
             } else {
-                showNotification('No media data available', 'error');
+                showNotification('Click 3 dots to download Audio', 'error');
             }
         }
 
@@ -2123,6 +2100,7 @@
         window.goToSlide = goToSlide;
         window.downloadSelectedImage = downloadSelectedImage;
         window.downloadCurrentMedia = downloadCurrentMedia;
+
 
     </script>
 </body>
