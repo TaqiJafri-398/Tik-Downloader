@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Downloader | Video, Audio & Images</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TikTok Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ... ALL YOUR EXISTING CSS STYLES ... */
@@ -36,6 +36,15 @@
             color: white;
             user-select: none;
             -webkit-user-select: none;
+            /* Hide scrollbar */
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        /* Hide scrollbar for webkit browsers */
+        body::-webkit-scrollbar {
+            display: none;
         }
 
         @keyframes gradient {
@@ -57,6 +66,15 @@
             border: 2px solid;
             color: black;
             border-color: yellow;
+            /* Hide scrollbar for container */
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        /* Hide scrollbar for webkit browsers */
+        .container::-webkit-scrollbar {
+            display: none;
         }
 
         .logo {
@@ -300,6 +318,8 @@
             margin-bottom: 8px;
             font-size: 1.2rem;
             color: white;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .video-info p {
@@ -309,11 +329,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .video-info i {
             color: var(--primary);
             width: 16px;
+            flex-shrink: 0;
         }
 
         /* PHOTO CAROUSEL STYLES */
@@ -449,6 +472,8 @@
             margin-bottom: 8px;
             font-size: 1rem;
             color: white;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .photo-info p {
@@ -458,11 +483,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .photo-info i {
             color: var(--primary);
             width: 16px;
+            flex-shrink: 0;
         }
 
         .photo-actions {
@@ -571,6 +599,9 @@
             gap: 10px;
             font-weight: 60;
             animation: slideDown 0.5s ease-out;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 90%;
         }
 
         @keyframes slideDown {
@@ -720,6 +751,8 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             transform: scale(0.8);
             transition: all 0.2s ease;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .modal.active .modal-content {
@@ -736,6 +769,10 @@
         .modal-title {
             font-size: 1.5rem;
             color: white;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            flex: 1;
+            margin-right: 10px;
         }
 
         .modal-close {
@@ -744,6 +781,7 @@
             color: white;
             font-size: 1.5rem;
             transition: opacity 0.2s ease;
+            flex-shrink: 0;
         }
 
         .modal-close:hover {
@@ -756,6 +794,20 @@
 
         .modal-body {
             color: white;
+            /* Allow text selection in modal body */
+            user-select: text;
+            -webkit-user-select: text;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            margin-bottom: 20px;
+        }
+
+        /* Make links in modal body clickable and copyable */
+        .modal-body a {
+            color: #00f2fe;
+            text-decoration: underline;
+            cursor: pointer;
+            word-break: break-all;
         }
 
         .modal-footer {
@@ -763,6 +815,67 @@
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* New styles for media download buttons */
+        .media-download-btn {
+            margin-top: 10px;
+            margin-left: 65px;
+            padding: 10px 15px;
+            background: linear-gradient(45deg, var(--primary), #e00046);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .media-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 80, 0.4);
+        }
+
+        .media-download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Audio preview styles */
+        .audio-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .audio-thumbnail {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .audio-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-bottom: 15px;
         }
 
         @media (max-width: 600px) {
@@ -789,7 +902,24 @@
             #userEmail {
                 max-width: 120px;
             }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            
+            .notification {
+                max-width: 95%;
+                font-size: 0.9rem;
+            }
         }
+
+
+
  </style>
 </head>
 
@@ -900,7 +1030,7 @@
 
         <div class="download-options">
             <button class="option-btn active" data-type="video">
-                <i class="fas fa-image"></i> Video / Images
+                <i class="fas fa-images"></i> Video / Images
             </button>
             <button class="option-btn" data-type="audio">
                 <i class="fas fa-music"></i> Audio
@@ -910,7 +1040,7 @@
 
         <div class="action-buttons">
             <button id="downloadBtn" class="action-btn pulse">
-                <i class="fas fa-download"></i>HD Download
+                <i class="fas fa-download"></i>Fetch Content
             </button>
             <button id="clearBtn" class="action-btn">
                 <i class="fas fa-broom"></i> Clear
@@ -934,7 +1064,7 @@
             <ol>
                 <li>No Watermark | Full HD Download</li>
                 <li>Paste Video/Image or Audio Link</li>
-                <li>Choose Video/Image or Audio & Click Download</li>
+                <li>Choose Video/Image or Audio & Click Fetch Content</li>
              
                 <li>User Friendly Beautiful UI Crafted by Taqi Jafri</li>
             </ol>
@@ -1189,7 +1319,31 @@
         // Show notification modal
         function showNotificationModal(notification) {
             notificationTitle.textContent = notification.title;
-            notificationDescription.textContent = notification.description;
+            
+            // Make links clickable and copyable in notification description
+            const description = notification.description;
+            const linkRegex = /(https?:\/\/[^\s]+)/g;
+            const linkedDescription = description.replace(linkRegex, '<a href="$1" target="_blank">$1</a>');
+            
+            notificationDescription.innerHTML = linkedDescription;
+            
+            // Add event listeners to links
+            const links = notificationDescription.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Open in system browser for webview
+                    window.open(link.href, '_system', 'location=yes');
+                });
+                
+                // Make links copyable on long press
+                link.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    copyToClipboard(link.href);
+                    showNotification('Link copied to clipboard', 'success');
+                });
+            });
+            
             notificationModal.classList.add('active');
             notificationModal.dataset.notificationId = notification.id;
         }
@@ -1210,6 +1364,16 @@
                 skipUpdateBtn.style.display = 'block';
                 closeUpdateModal.style.display = 'block';
             }
+        }
+
+        // Copy text to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
         }
 
         // Set up authentication event listeners
@@ -1355,8 +1519,8 @@
                 });
             });
 
-            // Download function
-            downloadBtn.addEventListener('click', handleDownload);
+            // Fetch function (changed from download)
+            downloadBtn.addEventListener('click', handleFetch);
 
             // Clear all inputs
             clearBtn.addEventListener('click', clearAll);
@@ -1364,7 +1528,7 @@
             // Enter key support
             videoUrlInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    handleDownload();
+                    handleFetch();
                 }
             });
         }
@@ -1416,7 +1580,8 @@
             downloadUpdateBtn.addEventListener('click', () => {
                 const updateLink = updateModal.dataset.updateLink;
                 if (updateLink) {
-                    window.open(updateLink, '_blank');
+                    // Open update link in new tab or system browser
+                    window.open(updateLink, '_system', 'location=yes');
                 }
             });
 
@@ -1470,8 +1635,8 @@
             }, 3000);
         }
 
-        // Main download handler
-        async function handleDownload() {
+        // Main fetch handler (changed from download)
+        async function handleFetch() {
             const url = videoUrlInput.value.trim();
             
             if (!url) {
@@ -1488,7 +1653,7 @@
                 showStatus('Connecting to TikTok...', 'loading');
                 downloadBtn.disabled = true;
                 downloadBtn.classList.remove('pulse');
-                downloadBtn.innerHTML = '<i class="fas fa-spinner download-spinner"></i> Processing...';
+                downloadBtn.innerHTML = '<i class="fas fa-spinner download-spinner"></i> Fetching...';
                 
                 // Fetch data
                 const data = await fetchTikTokContent(url);
@@ -1506,48 +1671,46 @@
                 
                 // Handle based on download type
                 if (downloadType === 'audio') {
-                    // AUDIO DOWNLOAD - always download audio only
+                    // AUDIO FETCH - show audio player
                     if (!data.audioUrl) {
                         throw new Error('No audio available for this content');
                     }
-                    showStatus('Downloading audio...', 'success');
-                    await downloadFile(data.audioUrl, 'audio');
+                    showAudioPreview(data);
+                    showStatus('Audio fetched successfully! Click download to save.', 'success');
                     
                 } else if (downloadType === 'video') {
-                    // VIDEO DOWNLOAD
+                    // VIDEO FETCH
                     if (data.type === 'photo_post') {
                         // For photo posts, show carousel for image selection
                         showPhotoCarousel(data);
-                        showStatus('Select an image from the carousel below', 'success');
+                        showStatus('Images fetched successfully! Select an image and click download.', 'success');
                     } else {
-                        // For video posts, download video immediately
+                        // For video posts, show video preview
                         if (!data.videoUrl) {
                             throw new Error('No video available for this content');
                         }
                         showVideoPreview(data);
-                        showStatus('Downloading video...', 'success');
-                        await downloadFile(data.videoUrl, 'video');
+                        showStatus('Video fetched successfully! Click download to save.', 'success');
                     }
                     
                 } else if (downloadType === 'images') {
-                    // IMAGES DOWNLOAD - show carousel for selection
+                    // IMAGES FETCH - show carousel for selection
                     if (data.type === 'photo_post') {
                         showPhotoCarousel(data);
-                        showStatus('Select an image from the carousel below', 'success');
+                        showStatus('Images fetched successfully! Select an image and click download.', 'success');
                     } else {
-                        // For video posts, download thumbnail
+                        // For video posts, show thumbnail
                         if (!data.thumbnail) {
                             throw new Error('No thumbnail available for this content');
                         }
                         showVideoPreview(data);
-                        showStatus('Downloading thumbnail...', 'success');
-                        await downloadFile(data.thumbnail, 'image');
+                        showStatus('Thumbnail fetched successfully! Click download to save.', 'success');
                     }
                 }
                 
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
-                showNotification('Download failed: ' + error.message, 'error');
+                showNotification('Fetch failed: ' + error.message, 'error');
             } finally {
                 resetDownloadButton();
             }
@@ -1557,7 +1720,7 @@
         function resetDownloadButton() {
             downloadBtn.disabled = false;
             downloadBtn.classList.add('pulse');
-            downloadBtn.innerHTML = '<i class="fas fa-download"></i>HD Download';
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i>Fetch Content';
         }
 
         // Validate TikTok URL
@@ -1625,7 +1788,7 @@
             }
         }
 
-        // ANDROID COMPATIBLE DOWNLOAD FUNCTION
+        // RESTORED ORIGINAL DOWNLOAD FUNCTION
         async function downloadFile(url, type) {
             if (!url) {
                 throw new Error('No download URL available');
@@ -1643,22 +1806,38 @@
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = filename;
+                a.setAttribute('target', '_self'); // Ensure it doesn't open in new tab
                 
                 // For Android, we need to append to body and click
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 
-                // Method 2: If first method fails, try opening in new tab
-                setTimeout(() => {
-                    // Check if download started
-                    const isAndroid = /Android/.test(navigator.userAgent);
-                    if (isAndroid) {
-                        // Android often needs a new tab
-                        window.open(url, '_blank');
-                        showNotification(`If download doesn't start, tap the 3-dot menu and select "Download"`, 'info');
-                    }
-                }, 1000);
+                // Method 2: Use fetch and blob for better control
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    
+                    const blobLink = document.createElement('a');
+                    blobLink.href = blobUrl;
+                    blobLink.download = filename;
+                    blobLink.setAttribute('target', '_self'); // Ensure it doesn't open in new tab
+                    
+                    document.body.appendChild(blobLink);
+                    blobLink.click();
+                    document.body.removeChild(blobLink);
+                    
+                    // Clean up
+                    setTimeout(() => {
+                        URL.revokeObjectURL(blobUrl);
+                    }, 100);
+                    
+                } catch (blobError) {
+                    console.log('Blob method failed:', blobError);
+                    // Fallback to direct download
+                    showStatus(`Downloading ${type}...`, 'success');
+                }
                 
                 showStatus(`${type.charAt(0).toUpperCase() + type.slice(1)} download started!`, 'success');
                 showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} download initiated!`, 'success');
@@ -1666,10 +1845,9 @@
             } catch (error) {
                 console.error('Download error:', error);
                 
-                // Last resort: Open in new tab
-                window.open(url, '_blank');
-                showStatus(`Opening ${type} in new tab...`, 'info');
-                showNotification(`Please save the ${type} from the new tab`, 'info');
+                // Last resort: Show error instead of opening in new tab
+                showStatus(`Download failed: ${error.message}`, 'error');
+                showNotification(`Download failed. Please try again.`, 'error');
             }
         }
 
@@ -1679,10 +1857,10 @@
             photoCarousel.style.display = 'none';
             
             videoPreview.innerHTML = `
-                <div class="thumbnail-container" onclick="switchToVideo()">
+                <div class="thumbnail-container">
                     <img src="${videoData.thumbnail || 'https://via.placeholder.com/300x400/333/fff?text=Thumbnail+Not+Available'}" 
                          alt="Video Thumbnail" class="video-thumbnail">
-                    <div class="play-overlay">
+                    <div class="play-overlay" onclick="switchToVideo()">
                         <i class="fas fa-play"></i>
                     </div>
                     <video id="videoPlayer" controls style="display: none;">
@@ -1694,7 +1872,41 @@
                     <h3>${videoData.title}</h3>
                     <p><i class="fas fa-user"></i> ${videoData.author}</p>
                     ${videoData.duration ? `<p><i class="fas fa-clock"></i> ${videoData.duration}</p>` : ''}
-                    <p><i class="fas fa-download"></i> Downloading as: <strong>${downloadType.toUpperCase()}</strong></p>
+                    <p><i class="fas fa-download"></i> Ready to download as: <strong>${downloadType.toUpperCase()}</strong></p>
+                </div>
+                <div style="padding: 0 20px 20px;">
+                    <button class="media-download-btn" onclick="downloadCurrentMedia('video')">
+                        <i class="fas fa-download"></i> Download Video
+                    </button>
+                </div>
+            `;
+        }
+
+        // Show audio preview
+        function showAudioPreview(audioData) {
+            videoPreview.style.display = 'block';
+            photoCarousel.style.display = 'none';
+            
+            videoPreview.innerHTML = `
+                <div class="audio-preview">
+                    <img src="${audioData.thumbnail || 'https://via.placeholder.com/120x120/333/fff?text=Audio'}" 
+                         alt="Audio Thumbnail" class="audio-thumbnail">
+                    <div class="audio-title">${audioData.title}</div>
+                    <audio id="audioPlayer" controls class="audio-player">
+                        <source src="${audioData.audioUrl}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <div class="video-info">
+                    <h3>${audioData.title}</h3>
+                    <p><i class="fas fa-user"></i> ${audioData.author}</p>
+                    <p><i class="fas fa-music"></i> Audio Track</p>
+                    <p><i class="fas fa-download"></i> Ready to download as: <strong>AUDIO</strong></p>
+                </div>
+                <div style="padding: 0 20px 20px;">
+                    <button class="media-download-btn" onclick="downloadCurrentMedia('audio')">
+                        <i class="fas fa-download"></i> Download Audio
+                    </button>
                 </div>
             `;
         }
@@ -1840,6 +2052,25 @@
             }
         }
 
+        // Download current media (video or audio)
+        async function downloadCurrentMedia(type) {
+            if (type === 'video' && currentVideoData) {
+                try {
+                    await downloadFile(currentVideoData.videoUrl, 'video');
+                } catch (error) {
+                    showNotification('Failed to download video: ' + error.message, 'error');
+                }
+            } else if (type === 'audio' && currentVideoData) {
+                try {
+                    await downloadFile(currentVideoData.audioUrl, 'audio');
+                } catch (error) {
+                    showNotification('Failed to download audio: ' + error.message, 'error');
+                }
+            } else {
+                showNotification('No media data available', 'error');
+            }
+        }
+
         // Show status message
         function showStatus(message, type) {
             statusDiv.textContent = message;
@@ -1879,7 +2110,7 @@
             if (thumbnail) thumbnail.style.display = 'none';
             if (videoPlayer) {
                 videoPlayer.style.display = 'block';
-                videoPlayer.play().catch(e => console.log('Autoplay prevented:', e));
+                // Don't autoplay, just show the player
             }
             if (playOverlay) playOverlay.style.display = 'none';
         }
@@ -1891,7 +2122,7 @@
         window.selectImage = selectImage;
         window.goToSlide = goToSlide;
         window.downloadSelectedImage = downloadSelectedImage;
-
+        window.downloadCurrentMedia = downloadCurrentMedia;
 
     </script>
 </body>
